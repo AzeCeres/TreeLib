@@ -4,9 +4,6 @@
 #include <string>
 #include <vector>
 using namespace std;
-
-void hello();
-
 class Tree;
 Tree newTree();
 class Node {

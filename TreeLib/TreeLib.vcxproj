@@ -130,6 +130,7 @@
     <ClCompile Include="TreeLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GraphLib.h" />
     <ClInclude Include="TreeLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
