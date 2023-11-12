@@ -127,7 +127,15 @@ void TestGraphLibrary()
  cout << node3->isConnectedTo(node8); // False
  cout << node3->isConnectedTo(node1); // True
  cout << node3->isConnectedTo(node3); // False
- 
+ node3->Disconnect(node1);
+ node3Connections = node3->GetConnections();
+ cout << "\nNode 3 Checks after disconnecting from node 1\n";
+ for (auto connection : node3Connections)
+ {
+  cout << connection->value << " ";
+ } // Should be 2 4 5 6
+ cout << node3->isConnectedTo(node1); // False
+ cout << node1->isConnectedTo(node3); // False
  
  
 }
@@ -136,6 +144,8 @@ void TestGraphLibrary()
 /// 1
 /// Node 3 Checks
 /// 051 2 3 4 5 6 010
+/// Node 3 Checks after disconnecting from node 1
+/// 2 4 5 6 00
 int main() {
   cout<<"Testing Tree Library \n";
   TestTreeLibrary();

@@ -59,19 +59,24 @@ class GNode
  }
 
  /**
-  * \brief Disconnects this gnode and the given gnode. removes each other from their respective "connections" if they aren't already disconnected
-  * \param gnode 
-  */
- void Disconnect(GNode* gnode)
- {
+ * \brief Disconnects this gnode and the given gnode. removes each other from their respective "connections" if they aren't already disconnected
+ * Doesn't work todo fix
+ * \param gnode 
+ */
+ void Disconnect(GNode* gnode){
   if (isConnectedTo(gnode))
-   for (int i = 0; i < GetNumOfConnections(); ++i)
-   {
-    if(connections.at(i) == gnode)
-      connections.pop_back(gnode);
+   for (int i = 0; i < GetNumOfConnections(); ++i) {
+    if (connections.at(i) != gnode) continue;
+    gnode->connections.erase(gnode->connections.begin() + i);
+    break; // Exit the loop after removing the element
    }
+
   if (gnode->isConnectedTo(this))
-   gnode->connections.emplace_back(this);
+   for (int i = 0; i < gnode->GetNumOfConnections(); ++i) {
+    if (gnode->connections.at(i) != this) continue;
+    gnode->connections.erase(gnode->connections.begin() + i);
+    break; // Exit the loop after removing the element
+   }
  }
  explicit GNode() {
   this->value = INT_MIN;
@@ -83,5 +88,11 @@ class GNode
   this->value = value;
   this->AddConnection(connedGNode);
  }
- 
+ void DeleteNode() {
+  for (GNode* gnode : connections) {
+   gnode->Disconnect(this);
+  }
+  connections.clear();
+  delete this;
+ }
 };
