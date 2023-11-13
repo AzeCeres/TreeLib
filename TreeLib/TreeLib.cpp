@@ -100,6 +100,13 @@ void TestGraphLibrary()
  ///   2-----3--6    8
  ///    \   / \ |
  ///      4-----5
+ ///
+ /// After Deletion of 1 and 3:
+ ///    2   7
+ ///    \    \
+ ///     4   6   8
+ ///      \ |
+ ///       5
  GNode* node1 = new GNode();
  cout << node1->GetValue();
  node1->SetValue(1);
@@ -136,8 +143,14 @@ void TestGraphLibrary()
  } // Should be 2 4 5 6
  cout << node3->isConnectedTo(node1); // False
  cout << node1->isConnectedTo(node3); // False
- 
- 
+ cout << "\nBreadth-First Search: ";
+ node1->BFS();
+ cout << endl;
+ node1->DeleteNode();
+ node3->DeleteNode();
+ cout << "\nBreadth-First Search: ";
+ node2->BFS();
+
 }
 /// Expected Output
 /// -2147483648 (INT_MIN, since that's the default value)

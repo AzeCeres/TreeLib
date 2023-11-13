@@ -1,4 +1,8 @@
 ﻿#pragma once
+#include <iostream>
+#include <vector>
+
+using namespace std;
 
 /**
  * \brief Like a Tree node, but for a graph instead
@@ -60,23 +64,17 @@ class GNode
 
  /**
  * \brief Disconnects this gnode and the given gnode. removes each other from their respective "connections" if they aren't already disconnected
- * Doesn't work todo fix
+ * Doesn't work if the given gnode isn't connected to this gnode
  * \param gnode 
  */
- void Disconnect(GNode* gnode){
-  if (isConnectedTo(gnode))
-   for (int i = 0; i < GetNumOfConnections(); ++i) {
-    if (connections.at(i) != gnode) continue;
-    gnode->connections.erase(gnode->connections.begin() + i);
-    break; // Exit the loop after removing the element
-   }
+ void Disconnect(GNode* gnode) {
+  // Use the erase-remove idiom for disconnecting both nodes
+  auto it = std::remove(connections.begin(), connections.end(), gnode);
+  connections.erase(it, connections.end());
 
-  if (gnode->isConnectedTo(this))
-   for (int i = 0; i < gnode->GetNumOfConnections(); ++i) {
-    if (gnode->connections.at(i) != this) continue;
-    gnode->connections.erase(gnode->connections.begin() + i);
-    break; // Exit the loop after removing the element
-   }
+  // Remove the reverse connection
+  it = std::remove(gnode->connections.begin(), gnode->connections.end(), this);
+  gnode->connections.erase(it, gnode->connections.end());
  }
  explicit GNode() {
   this->value = INT_MIN;
@@ -89,10 +87,41 @@ class GNode
   this->AddConnection(connedGNode);
  }
  void DeleteNode() {
-  for (GNode* gnode : connections) {
-   gnode->Disconnect(this);
+  // Disconnect this node from its neighbors
+  for (GNode* neighbor : connections) {
+   neighbor->Disconnect(this);
   }
+
+  // Clear the connections vector
   connections.clear();
+
+  // Delete this node
   delete this;
  }
+ void BFS() const {
+  queue<const GNode*> bfsQueue;
+  vector<const GNode*> visited;
+
+  bfsQueue.push(this);
+  visited.push_back(this);
+
+  while (!bfsQueue.empty()) {
+   const GNode* current = bfsQueue.front();
+   bfsQueue.pop();
+
+   // Process the current node
+   cout << current->value << " ";
+
+   // Enqueue unvisited neighbors
+   for (const GNode* neighbor : current->connections) {
+    if (find(visited.begin(), visited.end(), neighbor) == visited.end()) {
+     bfsQueue.push(neighbor);
+     visited.push_back(neighbor);
+    }
+   }
+  }
+
+  cout << endl;
+ }
 };
+
