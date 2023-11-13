@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+class GNode;
 using namespace std;
 
 /**
@@ -69,11 +70,11 @@ class GNode
  */
  void Disconnect(GNode* gnode) {
   // Use the erase-remove idiom for disconnecting both nodes
-  auto it = std::remove(connections.begin(), connections.end(), gnode);
+  auto it = remove(connections.begin(), connections.end(), gnode);
   connections.erase(it, connections.end());
 
   // Remove the reverse connection
-  it = std::remove(gnode->connections.begin(), gnode->connections.end(), this);
+  it = remove(gnode->connections.begin(), gnode->connections.end(), this);
   gnode->connections.erase(it, gnode->connections.end());
  }
  explicit GNode() {
@@ -85,18 +86,6 @@ class GNode
  explicit GNode(int value, GNode* connedGNode) {
   this->value = value;
   this->AddConnection(connedGNode);
- }
- void DeleteNode() {
-  // Disconnect this node from its neighbors
-  for (GNode* neighbor : connections) {
-   neighbor->Disconnect(this);
-  }
-
-  // Clear the connections vector
-  connections.clear();
-
-  // Delete this node
-  delete this;
  }
  void BFS() const {
   queue<const GNode*> bfsQueue;
@@ -120,8 +109,20 @@ class GNode
     }
    }
   }
-
   cout << endl;
  }
 };
+static void DeleteGNode(GNode* gnode) {
+ // Disconnect this node from its neighbors
+ for (int i = gnode->connections.size() - 1; i >= 0; --i){ //reversed for loop to avoid skipping over any disconnections
+  gnode->connections.at(i)->Disconnect(gnode);
+ }
+
+ // Clear the connections vector
+ gnode->connections.clear();
+
+ // Delete this node
+ delete gnode;
+}
+
 

@@ -102,10 +102,10 @@ void TestGraphLibrary()
  ///      4-----5
  ///
  /// After Deletion of 1 and 3:
- ///    2   7
+ ///   2    7
  ///    \    \
  ///     4   6   8
- ///      \ |
+ ///      \ /
  ///       5
  GNode* node1 = new GNode();
  cout << node1->GetValue();
@@ -121,6 +121,7 @@ void TestGraphLibrary()
  GNode* node6 = new GNode(6, node5);
  node6->AddConnection(node3);
  GNode* node7 = new GNode(7, node1);
+ node7->AddConnection(node6);
  GNode* node8 = new GNode(8);
 
  cout << "\nNode 3 Checks\n";
@@ -130,7 +131,7 @@ void TestGraphLibrary()
  for (auto connection : node3Connections)
  {
   cout << connection->value << " ";
- } // Should be 1 2 4 5 6
+ } // Should be 1 2 4 5 6 7
  cout << node3->isConnectedTo(node8); // False
  cout << node3->isConnectedTo(node1); // True
  cout << node3->isConnectedTo(node3); // False
@@ -146,8 +147,8 @@ void TestGraphLibrary()
  cout << "\nBreadth-First Search: ";
  node1->BFS();
  cout << endl;
- node1->DeleteNode();
- node3->DeleteNode();
+ DeleteGNode(node1);
+ DeleteGNode(node3);
  cout << "\nBreadth-First Search: ";
  node2->BFS();
 
